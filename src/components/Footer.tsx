@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
 
         <div>
           <a 
-            href="https://webdesignking.online" 
+            href="https://www.webdesignking.online" 
             target="_blank" 
             rel="noopener noreferrer"
             className="font-semibold text-black hover:underline inline-flex items-center gap-2 text-sm"
