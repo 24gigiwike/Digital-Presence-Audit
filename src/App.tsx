@@ -7,12 +7,12 @@ import React, { useState } from 'react';
 import { UserInformation, AuditAnswers, AuditReportData, CategoryScores, ScoreTier, RecommendationItem, GeminiInsight } from './types';
 import { AUDIT_QUESTIONS } from './data/questions';
 import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
 import { LandingPage } from './components/LandingPage';
 import { UserInfoModal } from './components/UserInfoModal';
 import { AssessmentExperience } from './components/AssessmentExperience';
 import { AnalyzingScanner } from './components/AnalyzingScanner';
 import { ResultsDashboard } from './components/ResultsDashboard';
-import { HowItWorksModal } from './components/HowItWorksModal';
 import { ContactKingModal } from './components/ContactKingModal';
 
 type AppStep = 'landing' | 'user-info' | 'assessment' | 'analyzing' | 'results';
@@ -23,7 +23,6 @@ export default function App() {
   const [report, setReport] = useState<AuditReportData | null>(null);
   
   // Modals state
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [showContactKing, setShowContactKing] = useState(false);
 
   const handleStartFromLanding = () => {
@@ -230,68 +229,54 @@ Transform your digital architecture: https://webdesignking.com
   };
 
   return (
-    <div className="h-screen w-screen bg-[#0A0A0B] text-white font-sans flex flex-col overflow-hidden select-none">
-      {/* Top Navigation Bar matching Sophisticated Dark theme HTML */}
-      <Navbar
-        userInfo={userInfo}
-        onNavigateHome={() => setStep(report ? 'results' : 'landing')}
-        onOpenHowItWorks={() => setShowHowItWorks(true)}
-        onOpenContact={() => setShowContactKing(true)}
-        currentStep={step}
-      />
+    <div className="min-h-screen w-full bg-white text-black font-sans flex flex-col justify-between overflow-x-hidden select-none">
+      {/* Minimal Header flowing naturally with the page */}
+      <Navbar onNavigateHome={() => setStep(report ? 'results' : 'landing')} />
 
-      {/* Dynamic View Router */}
-      {step === 'landing' && (
-        <LandingPage
-          onStartAudit={handleStartFromLanding}
-          onSeeHowItWorks={() => setShowHowItWorks(true)}
-        />
-      )}
+      {/* Main View Router */}
+      <main className="flex-1 w-full flex flex-col items-center justify-center my-auto">
+        {step === 'landing' && (
+          <LandingPage onStartAudit={handleStartFromLanding} />
+        )}
 
-      {step === 'user-info' && (
-        <UserInfoModal
-          onComplete={handleCompleteUserInfo}
-          onCancel={() => setStep('landing')}
-        />
-      )}
+        {step === 'user-info' && (
+          <UserInfoModal
+            onComplete={handleCompleteUserInfo}
+            onCancel={() => setStep('landing')}
+          />
+        )}
 
-      {step === 'assessment' && (
-        <AssessmentExperience
-          questions={AUDIT_QUESTIONS}
-          userName={userInfo?.name}
-          onComplete={handleCompleteAssessment}
-          onCancel={() => setStep('landing')}
-        />
-      )}
+        {step === 'assessment' && (
+          <AssessmentExperience
+            questions={AUDIT_QUESTIONS}
+            userName={userInfo?.name}
+            onComplete={handleCompleteAssessment}
+            onCancel={() => setStep('landing')}
+          />
+        )}
 
-      {step === 'analyzing' && (
-        <AnalyzingScanner
-          userName={userInfo?.name}
-          profession={userInfo?.profession}
-          onComplete={() => setStep('results')}
-        />
-      )}
+        {step === 'analyzing' && (
+          <AnalyzingScanner
+            userName={userInfo?.name}
+            profession={userInfo?.profession}
+            onComplete={() => setStep('results')}
+          />
+        )}
 
-      {step === 'results' && report && (
-        <ResultsDashboard
-          report={report}
-          onWorkWithKing={() => setShowContactKing(true)}
-          onDownloadReport={handleDownloadReport}
-          onRetakeAudit={() => setStep('landing')}
-        />
-      )}
+        {step === 'results' && report && (
+          <ResultsDashboard
+            report={report}
+            onWorkWithKing={() => setShowContactKing(true)}
+            onDownloadReport={handleDownloadReport}
+            onRetakeAudit={() => setStep('landing')}
+          />
+        )}
+      </main>
+
+      {/* Footer flowing naturally at page bottom */}
+      <Footer />
 
       {/* Modals */}
-      {showHowItWorks && (
-        <HowItWorksModal
-          onClose={() => setShowHowItWorks(false)}
-          onStartAudit={() => {
-            setShowHowItWorks(false);
-            setStep('user-info');
-          }}
-        />
-      )}
-
       {showContactKing && (
         <ContactKingModal
           onClose={() => setShowContactKing(false)}

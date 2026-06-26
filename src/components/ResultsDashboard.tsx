@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { AuditReportData, RecommendationItem } from '../types';
-import { Download, Sparkles, ArrowRight, CheckCircle, AlertTriangle, ShieldAlert, Cpu, Share2, Layers, Zap } from 'lucide-react';
+import { AuditReportData } from '../types';
 import confetti from 'canvas-confetti';
 
 interface ResultsDashboardProps {
@@ -19,135 +18,129 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
   const { userInfo, overallScore, categoryScores, tier, strengths, weaknesses, recommendations, aiInsight } = report;
 
   useEffect(() => {
-    // Trigger celebratory confetti for completing the audit
     try {
       confetti({
         particleCount: 80,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#FFFFFF', '#F59E0B', '#3B82F6', '#10B981']
+        colors: ['#82e3aa', '#42c28b', '#fb7474', '#fbf6bc', '#81eee8']
       });
     } catch (e) {
-      // ignore if confetti fails in sandbox
+      // ignore
     }
   }, []);
 
-  // Compute SVG circle offset for 78 / 100 style circle
-  // Radius = 120, Circumference = 2 * PI * 120 = ~753.6
   const circumference = 753.6;
   const offset = circumference - (overallScore / 100) * circumference;
 
   const categoriesList = [
-    { name: 'Brand Clarity', key: 'brandClarity', score: categoryScores.brandClarity },
-    { name: 'Trust & Credibility', key: 'trustCredibility', score: categoryScores.trustCredibility },
-    { name: 'Visual Experience', key: 'visualExperience', score: categoryScores.visualExperience },
-    { name: 'Conversion System', key: 'conversionSystem', score: categoryScores.conversionSystem },
-    { name: 'Growth Foundation', key: 'growthFoundation', score: categoryScores.growthFoundation },
+    { name: 'Brand Clarity', score: categoryScores.brandClarity },
+    { name: 'Trust & Credibility', score: categoryScores.trustCredibility },
+    { name: 'Visual Experience', score: categoryScores.visualExperience },
+    { name: 'Conversion System', score: categoryScores.conversionSystem },
+    { name: 'Growth Foundation', score: categoryScores.growthFoundation },
   ];
 
-  const getTierColor = (t: string) => {
-    switch(t) {
-      case 'Digital Authority': return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
-      case 'Strong Foundation': return 'text-amber-300 border-amber-400/30 bg-amber-400/10';
-      case 'Hidden Potential': return 'text-sky-400 border-sky-500/30 bg-sky-500/10';
-      default: return 'text-rose-400 border-rose-500/30 bg-rose-500/10';
-    }
-  };
-
   return (
-    <div className="flex-1 flex flex-col overflow-y-auto select-none bg-[#0A0A0B] text-white font-sans">
-      {/* Main Content Layout matching exact Design HTML provided by User */}
-      <main className="flex-1 flex flex-col lg:flex-row gap-8 p-6 md:p-10 max-w-7xl mx-auto w-full">
-        
-        {/* Left Column: The Hero Score */}
-        <section className="w-full lg:w-[420px] flex flex-col shrink-0">
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 sm:p-10 flex flex-col items-center justify-center text-center flex-1 relative overflow-hidden shadow-2xl glass-card">
-            {/* Decorative Background Gradient */}
-            <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-amber-400/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="w-full max-w-7xl mx-auto py-12 px-6 flex flex-col gap-8 select-none">
+      {/* Top Profile Banner */}
+      <div className="w-full bg-gradient-to-r from-[#fbf6bc]/40 via-[#81eee8]/20 to-white border border-[#82e3aa] rounded-3xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div>
+          <span className="text-xs uppercase tracking-[0.2em] text-black font-mono font-bold opacity-60 block">
+            Assessment ID: #{report.id}
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-black text-black tracking-tight mt-1">
+            {userInfo.name}'s Digital Presence Audit
+          </h1>
+          <p className="text-xs text-black font-normal opacity-80 mt-1">
+            Channel: <strong className="font-bold">{userInfo.mainPlatform}</strong> • Category: <strong className="font-bold">{userInfo.profession}</strong>
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <button
+            onClick={onDownloadReport}
+            className="flex-1 sm:flex-none py-3.5 px-6 rounded-full bg-white border border-[#42c28b] text-black font-bold text-xs uppercase tracking-widest shadow-sm hover:bg-[#fbf6bc]/50 transition-all flex items-center justify-center gap-2"
+          >
+            <i className="fa-solid fa-download text-[#42c28b]"></i>
+            Download Report
+          </button>
+          <button
+            onClick={onRetakeAudit}
+            className="py-3.5 px-5 rounded-full bg-white border border-[#fb7474]/40 text-black font-bold text-xs uppercase tracking-widest shadow-sm hover:bg-[#fb7474]/20 transition-all"
+            title="Start Over"
+          >
+            <i className="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Left Column: Hero Score */}
+        <div className="lg:col-span-4 flex flex-col gap-8">
+          <div className="bg-white border-2 border-[#82e3aa] rounded-3xl p-8 sm:p-10 flex flex-col items-center text-center relative overflow-hidden shadow-xl">
+            <div className="absolute -top-16 -right-16 w-48 h-48 bg-[#81eee8]/25 rounded-full blur-2xl pointer-events-none" />
             
-            <p className="text-[11px] uppercase tracking-[0.3em] text-white/40 mb-8 font-mono">
-              Overall Audit Score™
-            </p>
+            <span className="text-xs uppercase tracking-[0.25em] text-black font-mono font-extrabold mb-6 opacity-70">
+              Overall Benchmark Score
+            </span>
             
             <div className="relative flex items-center justify-center py-4">
-              <svg className="w-64 h-64 transform -rotate-90">
-                <circle cx="128" cy="128" r="120" stroke="currentColor" strokeWidth="2" fill="transparent" className="text-white/5" />
+              <svg className="w-56 h-56 transform -rotate-90">
+                <circle cx="112" cy="112" r="100" stroke="#fbf6bc" strokeWidth="12" fill="transparent" />
                 <circle 
-                  cx="128" 
-                  cy="128" 
-                  r="120" 
-                  stroke="currentColor" 
-                  strokeWidth="4" 
+                  cx="112" 
+                  cy="112" 
+                  r="100" 
+                  stroke="#42c28b" 
+                  strokeWidth="12" 
                   fill="transparent" 
-                  strokeDasharray="753.6" 
-                  strokeDashoffset={offset}
+                  strokeDasharray="628.3" 
+                  strokeDashoffset={628.3 - (overallScore / 100) * 628.3}
                   strokeLinecap="round"
-                  className="text-white transition-all duration-1500" 
+                  className="transition-all duration-1000" 
                 />
               </svg>
               <div className="absolute flex flex-col items-center">
-                <span className="text-8xl font-light tracking-tighter font-serif">
+                <span className="text-6xl font-black tracking-tight text-black">
                   {overallScore}
                 </span>
-                <span className="text-white/40 text-xs tracking-widest mt-[-8px] font-mono">
-                  / 100
+                <span className="text-black text-xs font-mono font-bold mt-1 opacity-60">
+                  / 100 PTS
                 </span>
               </div>
             </div>
 
-            <div className="mt-8">
-              <div className={`inline-block px-4 py-1.5 rounded-full border mb-4 ${getTierColor(tier)}`}>
-                <span className="text-[10px] uppercase tracking-[0.2em] font-medium font-mono">
+            <div className="mt-6">
+              <div className="inline-block px-5 py-2 rounded-full bg-[#82e3aa]/30 border border-[#42c28b] mb-4">
+                <span className="text-xs uppercase tracking-widest font-black text-black">
                   {tier}
                 </span>
               </div>
-              <p className="text-sm text-white/60 leading-relaxed max-w-[300px] mx-auto font-light">
-                {aiInsight?.executiveSummary || `Your digital presence as a ${userInfo.profession} is ${overallScore >= 70 ? 'above market average' : 'developing'}, but key conversion friction points are preventing premium scaling.`}
+              <p className="text-xs text-black font-normal opacity-80 leading-relaxed">
+                Your score reflects immediate client perception, conversion clarity, and trust triggers.
               </p>
             </div>
-
-            {/* Assessor Details Badge */}
-            <div className="mt-10 pt-6 border-t border-white/10 w-full text-left bg-white/[0.02] -mx-10 -mb-10 p-6 rounded-b-3xl">
-              <div className="flex items-center justify-between text-xs text-white/50 mb-1">
-                <span className="font-mono uppercase tracking-wider">Assessed Profile:</span>
-                <span className="text-amber-300 font-mono">{userInfo.mainPlatform}</span>
-              </div>
-              <div className="text-sm font-medium text-white truncate">{userInfo.name}</div>
-              <div className="text-xs text-white/40 truncate">{userInfo.email}</div>
-            </div>
           </div>
-        </section>
 
-        {/* Right Column: The Breakdown & Analysis */}
-        <section className="flex-1 flex flex-col gap-6">
-          
-          {/* Diagnostic Breakdown Box */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 sm:p-10 shadow-xl glass-card">
-            <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
-              <h2 className="text-xs uppercase tracking-[0.25em] text-white/40 font-semibold font-mono">
-                Diagnostic Breakdown
-              </h2>
-              <span className="text-xs text-white/50 font-mono">20 Pts Max / Category</span>
-            </div>
-            
-            <div className="space-y-7">
+          {/* Category Breakdown Card */}
+          <div className="bg-white border border-[#82e3aa]/50 rounded-3xl p-8 shadow-md">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-black mb-6 opacity-70 font-mono">
+              Category Scores
+            </h3>
+            <div className="space-y-4">
               {categoriesList.map((cat, idx) => {
-                const percent = Math.round((cat.score / 20) * 100);
+                const pct = Math.round((cat.score / 20) * 100);
                 return (
-                  <div key={idx}>
-                    <div className="flex justify-between items-end mb-2.5">
-                      <span className="text-sm sm:text-base tracking-wide font-light italic font-serif text-white/90">
-                        {cat.name}
-                      </span>
-                      <span className="text-xs font-mono text-white/60">
-                        <strong className="text-white font-medium">{cat.score}</strong> / 20
-                      </span>
+                  <div key={idx} className="space-y-1.5">
+                    <div className="flex justify-between text-xs font-extrabold text-black">
+                      <span>{cat.name}</span>
+                      <span className="font-mono">{cat.score} / 20</span>
                     </div>
-                    <div className="h-[2px] w-full bg-white/10 overflow-hidden rounded-full">
+                    <div className="h-2.5 w-full bg-[#fbf6bc]/60 rounded-full overflow-hidden border border-[#82e3aa]/40">
                       <div 
-                        className="h-full bg-white transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1)"
-                        style={{ width: `${percent}%` }}
+                        className="h-full bg-[#42c28b] rounded-full transition-all duration-500" 
+                        style={{ width: `${pct}%` }} 
                       />
                     </div>
                   </div>
@@ -155,134 +148,142 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
               })}
             </div>
           </div>
+        </div>
 
-          {/* Strategy Insights Box (High contrast white card matching exact Design HTML) */}
-          <div className="bg-white text-[#0A0A0B] rounded-3xl p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden group">
-            <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
-            
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-600" />
-                  <h3 className="text-xs uppercase tracking-[0.2em] font-bold text-[#0A0A0B]/70 font-mono">
-                    Strategic Executive Diagnosis
-                  </h3>
-                </div>
-                {aiInsight && (
-                  <span className="text-[10px] uppercase font-mono px-2.5 py-1 rounded-full bg-[#0A0A0B]/5 border border-[#0A0A0B]/10 font-bold">
-                    Gemini AI Strategy Engine
-                  </span>
-                )}
+        {/* Right Column: AI Insights & Roadmap */}
+        <div className="lg:col-span-8 flex flex-col gap-8">
+          {/* Executive Diagnostic Summary */}
+          <div className="bg-gradient-to-br from-white via-[#81eee8]/10 to-[#fbf6bc]/15 border border-[#82e3aa] rounded-3xl p-8 sm:p-10 shadow-lg">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-2xl bg-[#42c28b] flex items-center justify-center shadow-sm">
+                <i className="fa-solid fa-wand-magic-sparkles text-white text-base"></i>
               </div>
-
-              <p className="text-lg sm:text-xl leading-relaxed font-light italic font-serif text-[#0A0A0B] mb-6">
-                "{aiInsight?.topBottleneck ? `Primary Bottleneck Identified: ${aiInsight.topBottleneck}. ` : ''}
-                {aiInsight?.strategyRoadmap || 'Your expertise is visible, but your conversion path is hidden. To attract higher-value retainer clients, we must bridge the gap between your talent and your offer presentation.'}"
-              </p>
-
-              {/* Quick Wins List */}
-              {aiInsight?.quickWins && aiInsight.quickWins.length > 0 && (
-                <div className="mt-6 pt-6 border-t border-[#0A0A0B]/10 space-y-3">
-                  <span className="text-xs font-bold uppercase tracking-widest text-[#0A0A0B]/60 block font-mono">
-                    ⚡ Immediate Conversion Quick Wins:
-                  </span>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {aiInsight.quickWins.map((win, i) => (
-                      <div key={i} className="bg-[#0A0A0B]/[0.03] border border-[#0A0A0B]/10 p-3.5 rounded-xl text-xs text-[#0A0A0B]/80 leading-snug">
-                        <strong className="text-[#0A0A0B] block mb-1 font-mono">Win #{i+1}:</strong>
-                        {win}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-black opacity-60 block">
+                  AI Diagnostic Engine
+                </span>
+                <h2 className="text-xl font-black text-black tracking-tight">
+                  Executive Summary
+                </h2>
+              </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-[#0A0A0B]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <span className="text-xs text-[#0A0A0B]/60 font-medium">
-                Want Web Design King to implement these fixes for you?
+            <p className="text-sm sm:text-base text-black font-normal leading-relaxed mb-8">
+              {aiInsight?.executiveSummary || "Your digital presence demonstrates solid foundational competence, but visitors encounter friction before booking calls."}
+            </p>
+
+            <div className="p-6 rounded-2xl bg-[#fb7474]/15 border border-[#fb7474] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs uppercase tracking-widest text-black font-extrabold block mb-1">
+                  Primary Conversion Bottleneck
+                </span>
+                <p className="text-xs sm:text-sm text-black font-medium opacity-90">
+                  {aiInsight?.topBottleneck || "Lack of a singular, dominant high-ticket call to action."}
+                </p>
+              </div>
+              <span className="px-3 py-1 bg-white border border-[#fb7474] text-black rounded-full text-[10px] font-black uppercase tracking-widest shrink-0">
+                Fix Priority 1
               </span>
-              <button
-                onClick={onWorkWithKing}
-                className="w-full sm:w-auto px-6 py-3 bg-[#0A0A0B] text-white rounded-full text-xs uppercase tracking-widest font-bold hover:bg-[#1f1f23] transition-all shadow-md flex items-center justify-center gap-2"
-              >
-                Claim Strategy Session
-                <ArrowRight className="w-4 h-4" />
-              </button>
             </div>
           </div>
 
-          {/* Actionable Recommendations Engine Section */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 sm:p-10 space-y-6 glass-card">
-            <h3 className="text-xs uppercase tracking-[0.25em] text-white/40 font-semibold font-mono">
-              Personalized Recommendations Engine™
-            </h3>
+          {/* Strengths & Weaknesses */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white border border-[#42c28b]/60 rounded-3xl p-7 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <i className="fa-solid fa-circle-check text-[#42c28b] text-lg"></i>
+                <h3 className="text-sm font-black uppercase tracking-wider text-black">
+                  Key Strengths
+                </h3>
+              </div>
+              <ul className="space-y-2.5">
+                {strengths.length > 0 ? strengths.map((s, i) => (
+                  <li key={i} className="text-xs text-black font-normal opacity-85 leading-relaxed flex items-start gap-2">
+                    <span className="text-[#42c28b] font-bold">•</span>
+                    <span>{s}</span>
+                  </li>
+                )) : (
+                  <li className="text-xs text-black opacity-70">Your channel setup establishes baseline digital reach.</li>
+                )}
+              </ul>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {recommendations.map((rec, idx) => (
-                <div key={idx} className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col justify-between space-y-4 hover:border-white/20 transition-all">
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-mono text-amber-300 uppercase tracking-widest px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20">
-                        {rec.category}
+            <div className="bg-white border border-[#fb7474] rounded-3xl p-7 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <i className="fa-solid fa-triangle-exclamation text-[#fb7474] text-lg"></i>
+                <h3 className="text-sm font-black uppercase tracking-wider text-black">
+                  Conversion Friction
+                </h3>
+              </div>
+              <ul className="space-y-2.5">
+                {weaknesses.length > 0 ? weaknesses.map((w, i) => (
+                  <li key={i} className="text-xs text-black font-normal opacity-85 leading-relaxed flex items-start gap-2">
+                    <span className="text-[#fb7474] font-bold">•</span>
+                    <span>{w}</span>
+                  </li>
+                )) : (
+                  <li className="text-xs text-black opacity-70">Your messaging could be sharper for high-ticket buyers.</li>
+                )}
+              </ul>
+            </div>
+          </div>
+
+          {/* Action Roadmap */}
+          <div className="bg-white border-2 border-[#82e3aa] rounded-3xl p-8 sm:p-10 shadow-xl">
+            <h2 className="text-xl font-black text-black tracking-tight mb-8">
+              Strategic Action Roadmap
+            </h2>
+
+            <div className="space-y-6">
+              {recommendations.map((rec, i) => (
+                <div key={i} className="p-6 rounded-2xl bg-[#fbf6bc]/20 border border-[#82e3aa] hover:border-[#42c28b] transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="w-7 h-7 rounded-lg bg-[#42c28b] text-white font-mono font-bold text-xs flex items-center justify-center">
+                        0{i+1}
                       </span>
-                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
-                        rec.impact === 'Critical' ? 'bg-rose-500/20 text-rose-300' : 'bg-white/10 text-white/60'
-                      }`}>
-                        {rec.impact} Impact
-                      </span>
+                      <h4 className="text-base font-extrabold text-black">
+                        {rec.title}
+                      </h4>
                     </div>
-                    <h4 className="text-sm font-medium text-white mb-1.5">{rec.title}</h4>
-                    <p className="text-xs text-white/60 font-light leading-relaxed">{rec.description}</p>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-3 py-1 bg-white border border-[#42c28b] rounded-full text-black self-start sm:self-auto">
+                      {rec.impact} Impact
+                    </span>
                   </div>
-                  <div className="pt-3 border-t border-white/10 text-xs text-white/80 flex items-start gap-2 font-light">
-                    <Zap className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" />
-                    <span><strong className="text-white font-medium">Action Step:</strong> {rec.actionStep}</span>
+
+                  <p className="text-xs text-black font-normal opacity-85 leading-relaxed mb-4">
+                    {rec.description}
+                  </p>
+
+                  <div className="pt-3 border-t border-[#82e3aa]/40 flex items-start gap-2.5 text-xs font-semibold text-black">
+                    <i className="fa-solid fa-arrow-right text-[#42c28b] mt-0.5"></i>
+                    <span><strong className="font-black">Action Step:</strong> {rec.actionStep}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-        </section>
-      </main>
-
-      {/* Bottom Action Bar matching exact Design HTML footer */}
-      <footer className="min-h-24 py-6 px-6 md:px-10 flex flex-col sm:flex-row items-center justify-between border-t border-white/10 bg-[#0D0D0F] gap-4 shrink-0 mt-8">
-        <div className="flex flex-col text-center sm:text-left">
-          <span className="text-[10px] uppercase tracking-widest text-white/40 mb-1 font-mono">
-            Audit Complete for
-          </span>
-          <span className="text-sm font-medium text-white">
-            {userInfo.name}, {userInfo.profession} ({userInfo.experienceLevel})
-          </span>
+          {/* Dominant Bottom CTA Card */}
+          <div className="bg-gradient-to-r from-[#82e3aa] via-[#42c28b] to-[#81eee8] rounded-3xl p-8 sm:p-12 text-center flex flex-col items-center justify-center shadow-2xl border-2 border-white">
+            <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-black mb-2 opacity-75">
+              Transform Your Architecture
+            </span>
+            <h3 className="text-2xl sm:text-4xl font-black text-black tracking-tight mb-4 max-w-xl">
+              Want Web Design King to implement these strategic fixes for you?
+            </h3>
+            <p className="text-sm text-black font-normal max-w-lg mb-8 opacity-90 leading-relaxed">
+              We build high-converting digital products and bespoke portfolio systems for elite creatives and agencies.
+            </p>
+            <button
+              onClick={onWorkWithKing}
+              className="py-5 px-10 rounded-full bg-white text-black font-black text-sm sm:text-base uppercase tracking-[0.18em] shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-black"
+            >
+              Book Executive Strategy Call
+            </button>
+          </div>
         </div>
-        
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          <button 
-            onClick={onRetakeAudit}
-            className="px-5 py-3 border border-white/15 rounded-full text-xs uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/5 transition-colors font-mono"
-          >
-            Retake Audit
-          </button>
-          
-          <button 
-            onClick={onDownloadReport}
-            className="px-6 py-3 border border-white/20 rounded-full text-xs uppercase tracking-widest text-white hover:bg-white/10 transition-colors flex items-center gap-2 shadow-sm font-mono"
-          >
-            <Download className="w-3.5 h-3.5 text-amber-300" />
-            Download Detailed Report
-          </button>
-          
-          <button 
-            onClick={onWorkWithKing}
-            className="px-8 py-3.5 bg-white text-[#0A0A0B] rounded-full text-xs uppercase tracking-widest font-extrabold hover:bg-white/90 transition-all shadow-lg hover:scale-105 flex items-center gap-2"
-          >
-            Work with Web Design King
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };

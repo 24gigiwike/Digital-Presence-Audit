@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Question, AuditAnswers } from '../types';
-import { ArrowRight, ArrowLeft, Check, Sparkles, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MICROCOPY_PROMPTS } from '../data/questions';
 
@@ -24,10 +23,9 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
   const currentQ = questions[currentIndex];
   const progressPercent = Math.round(((currentIndex) / questions.length) * 100);
 
-  // Microcopy prompt trigger
   const activeMicrocopy = MICROCOPY_PROMPTS[currentIndex + 1] || (
     currentIndex === 0 
-      ? `Great to meet you, ${userName || 'Assessor'}. Let's understand how people experience your brand online.`
+      ? `Great to meet you, ${userName || 'Assessor'}. Let's measure how high-intent prospects experience your brand.`
       : null
   );
 
@@ -35,7 +33,6 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
     const updated = { ...answers, [currentQ.id]: optionIdx };
     setAnswers(updated);
     
-    // Auto advance after short delay for single choice
     setTimeout(() => {
       if (currentIndex < questions.length - 1) {
         setDirection(1);
@@ -43,7 +40,7 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
       } else {
         onComplete(updated);
       }
-    }, 320);
+    }, 300);
   };
 
   const handleToggleChecklist = (optionIdx: number) => {
@@ -58,7 +55,6 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
   };
 
   const handleNextChecklist = () => {
-    // If nothing selected, set empty array
     const updated = {
       ...answers,
       [currentQ.id]: answers[currentQ.id] !== undefined ? answers[currentQ.id] : []
@@ -83,76 +79,72 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
   const currentAnswer = answers[currentQ.id];
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 overflow-hidden select-none max-w-4xl mx-auto w-full">
+    <div className="w-full max-w-4xl mx-auto py-12 px-6 flex flex-col items-center select-none">
       {/* Top Progress Header */}
       <div className="w-full mb-8">
         <div className="flex justify-between items-end mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase tracking-[0.25em] text-white/40 font-mono">
+            <span className="text-xs uppercase tracking-[0.2em] text-black font-mono font-bold opacity-60">
               Question {currentIndex + 1} of {questions.length}
             </span>
-            <span className="text-white/20 font-light">•</span>
-            <span className="text-xs tracking-wide font-light italic font-serif text-amber-300/90">
+            <span className="text-black opacity-30 font-bold">•</span>
+            <span className="text-xs tracking-wide font-extrabold text-black uppercase">
               {currentQ.categoryName}
             </span>
           </div>
-          <span className="text-xs font-mono text-white/60">{progressPercent}%</span>
+          <span className="text-xs font-mono font-bold text-black">{progressPercent}%</span>
         </div>
         
-        {/* Animated Progress Bar matching Sophisticated Dark theme */}
-        <div className="h-[2px] w-full bg-white/10 overflow-hidden rounded-full">
+        <div className="h-2 w-full bg-[#fbf6bc] overflow-hidden rounded-full border border-[#82e3aa]/30">
           <div 
-            className="h-full bg-white transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1)"
+            className="h-full bg-gradient-to-r from-[#82e3aa] to-[#42c28b] transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
-      {/* Encouraging Microcopy Banner */}
+      {/* Microcopy Banner */}
       {activeMicrocopy && (
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           key={`micro-${currentIndex}`}
-          className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-r from-white/[0.07] to-white/[0.02] border border-white/10 flex items-center gap-3 backdrop-blur-md"
+          className="w-full mb-6 p-4 rounded-2xl bg-[#81eee8]/20 border border-[#82e3aa] flex items-center gap-3 shadow-sm"
         >
-          <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
-          <p className="text-xs sm:text-sm text-white/85 font-light font-serif italic">
-            "{activeMicrocopy}"
+          <i className="fa-solid fa-wand-magic-sparkles text-[#42c28b]"></i>
+          <p className="text-xs sm:text-sm text-black font-normal leading-relaxed">
+            {activeMicrocopy}
           </p>
         </motion.div>
       )}
 
-      {/* Main Question Card View */}
+      {/* Question Card */}
       <div className="w-full relative min-h-[380px] flex flex-col justify-center">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentQ.id}
             custom={direction}
-            initial={{ opacity: 0, x: direction > 0 ? 40 : -40 }}
+            initial={{ opacity: 0, x: direction > 0 ? 30 : -30 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction > 0 ? -40 : 40 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-white/5 border border-white/10 rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-2xl backdrop-blur-xl w-full flex flex-col justify-between"
+            exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
+            transition={{ duration: 0.25 }}
+            className="bg-white border-2 border-[#82e3aa] rounded-3xl p-8 sm:p-12 shadow-xl w-full flex flex-col justify-between"
           >
-            {/* Ambient Corner Glow */}
-            <div className="absolute -top-20 -left-20 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none" />
-
             <div>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-mono mb-2 block">
+              <span className="text-[11px] uppercase tracking-[0.18em] text-black font-mono font-bold mb-2 block opacity-60">
                 Diagnostic Checkpoint • 20 Pts Section
               </span>
-              <h2 className="text-xl sm:text-2xl font-normal tracking-tight text-white leading-snug mb-2">
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-black leading-snug mb-3">
                 {currentQ.title}
               </h2>
               {currentQ.subtitle && (
-                <p className="text-xs sm:text-sm text-white/50 font-light mb-8 leading-relaxed">
+                <p className="text-xs sm:text-sm text-black font-normal opacity-80 mb-8 leading-relaxed">
                   {currentQ.subtitle}
                 </p>
               )}
             </div>
 
-            {/* Options List */}
+            {/* Options */}
             <div className="space-y-3 mt-4">
               {currentQ.type === 'choice' ? (
                 currentQ.options.map((opt, idx) => {
@@ -163,24 +155,23 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
                       onClick={() => handleSelectChoice(idx)}
                       className={`w-full p-4 sm:p-5 rounded-2xl border text-left transition-all flex items-center justify-between group ${
                         isSelected
-                          ? 'bg-white text-[#0A0A0B] border-white font-medium shadow-lg scale-[1.01]'
-                          : 'bg-white/[0.04] border-white/10 text-white/80 hover:bg-white/[0.08] hover:border-white/25 active:scale-[0.99]'
+                          ? 'bg-[#42c28b] text-black border-[#42c28b] font-extrabold shadow-md scale-[1.01]'
+                          : 'bg-white border-[#82e3aa]/60 text-black font-normal hover:bg-[#fbf6bc]/30 hover:border-[#42c28b]'
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-7 h-7 rounded-full border flex items-center justify-center text-xs font-mono transition-colors ${
-                          isSelected ? 'border-[#0A0A0B] bg-[#0A0A0B] text-white' : 'border-white/20 text-white/50 group-hover:border-white/50'
+                        <div className={`w-8 h-8 rounded-xl border flex items-center justify-center text-xs font-mono font-bold transition-colors ${
+                          isSelected ? 'border-black bg-white text-black' : 'border-[#82e3aa] text-black bg-[#fbf6bc]/20 group-hover:border-[#42c28b]'
                         }`}>
                           {String.fromCharCode(65 + idx)}
                         </div>
                         <span className="text-sm sm:text-base leading-snug">{opt.label}</span>
                       </div>
-                      {isSelected && <Check className="w-5 h-5 text-[#0A0A0B] shrink-0" />}
+                      {isSelected && <i className="fa-solid fa-check text-black text-base"></i>}
                     </button>
                   );
                 })
               ) : (
-                /* Checklist View */
                 <div>
                   <div className="space-y-2.5 mb-8">
                     {currentQ.options.map((opt, idx) => {
@@ -190,17 +181,17 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
                         <div
                           key={idx}
                           onClick={() => handleToggleChecklist(idx)}
-                          className={`w-full p-4 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                          className={`w-full p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                             isChecked
-                              ? 'bg-white/[0.12] border-white/40 text-white font-medium'
-                              : 'bg-white/[0.03] border-white/10 text-white/70 hover:bg-white/[0.06] hover:border-white/20'
+                              ? 'bg-[#81eee8]/40 border-[#42c28b] text-black font-bold shadow-sm'
+                              : 'bg-white border-[#82e3aa]/50 text-black font-normal hover:bg-[#fbf6bc]/20 hover:border-[#42c28b]'
                           }`}
                         >
                           <span className="text-sm">{opt.label}</span>
-                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
-                            isChecked ? 'bg-white border-white text-[#0A0A0B]' : 'border-white/20 bg-transparent'
+                          <div className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors ${
+                            isChecked ? 'bg-[#42c28b] border-[#42c28b] text-white' : 'border-[#82e3aa] bg-white'
                           }`}>
-                            {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                            {isChecked && <i className="fa-solid fa-check text-white text-xs"></i>}
                           </div>
                         </div>
                       );
@@ -210,30 +201,30 @@ export const AssessmentExperience: React.FC<AssessmentExperienceProps> = ({
                   <div className="flex justify-end">
                     <button
                       onClick={handleNextChecklist}
-                      className="px-8 py-3.5 bg-white text-[#0A0A0B] rounded-full text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-all shadow-md flex items-center gap-2"
+                      className="px-8 py-4 bg-gradient-to-r from-[#82e3aa] to-[#42c28b] text-black rounded-full text-xs uppercase tracking-widest font-black shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2 border border-white"
                     >
                       Confirm Selection
-                      <ArrowRight className="w-4 h-4" />
+                      <i className="fa-solid fa-arrow-right text-black"></i>
                     </button>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Bottom Nav Controls */}
-            <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between text-xs uppercase tracking-widest text-white/40">
+            {/* Controls */}
+            <div className="mt-8 pt-6 border-t border-[#82e3aa]/30 flex items-center justify-between text-xs uppercase tracking-widest text-black font-bold">
               <button
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
-                className={`flex items-center gap-1.5 hover:text-white transition-colors ${currentIndex === 0 ? 'opacity-20 cursor-not-allowed' : ''}`}
+                className={`flex items-center gap-2 hover:opacity-100 transition-opacity ${currentIndex === 0 ? 'opacity-20 cursor-not-allowed' : 'opacity-70'}`}
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <i className="fa-solid fa-arrow-left"></i>
                 Previous
               </button>
               
               <button
                 onClick={onCancel}
-                className="hover:text-rose-400 transition-colors"
+                className="opacity-60 hover:opacity-100 text-[#fb7474] transition-opacity"
               >
                 Exit Audit
               </button>

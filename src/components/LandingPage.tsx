@@ -1,231 +1,211 @@
 import React from 'react';
-import { ArrowRight, Check, Sparkles, ShieldCheck, TrendingUp, Users, Award, Eye, Zap, Layers } from 'lucide-react';
 
 interface LandingPageProps {
   onStartAudit: () => void;
-  onSeeHowItWorks: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({
-  onStartAudit,
-  onSeeHowItWorks
-}) => {
-  const reportDeliverables = [
-    { title: "Digital Presence Score™", desc: "Executive benchmark out of 100 points" },
-    { title: "Brand Clarity Rating", desc: "5-second value proposition evaluation" },
-    { title: "Trust & Credibility Score", desc: "Proof architecture and social authority check" },
-    { title: "Visual Experience Review", desc: "Design polish, consistency & mobile speed" },
-    { title: "Conversion Readiness", desc: "Friction analysis of your client booking funnel" },
-    { title: "Growth Opportunities", desc: "Tailored strategic blueprint to scale retainers" }
+export const LandingPage: React.FC<LandingPageProps> = ({ onStartAudit }) => {
+  const steps = [
+    { num: "01", title: "Answer a few questions", icon: "fa-clipboard-question", desc: "Select your digital presence channels and core business goals." },
+    { num: "02", title: "Receive your digital presence score", icon: "fa-gauge-high", desc: "Get an instant diagnostic benchmark score calibrated to industry leaders." },
+    { num: "03", title: "Get personalized recommendations", icon: "fa-wand-magic-sparkles", desc: "Receive direct action steps to eliminate conversion friction immediately." }
   ];
 
-  const targetPersonas = [
-    {
-      category: "Freelancers",
-      items: ["Designers", "Developers", "Copywriters", "Marketers", "Video editors", "Creators", "Consultants"],
-      icon: <Award className="w-5 h-5 text-amber-300" />
-    },
-    {
-      category: "Agencies",
-      items: ["Small creative agencies", "Digital studios", "Marketing teams", "Boutique consultancies"],
-      icon: <Layers className="w-5 h-5 text-indigo-300" />
-    },
-    {
-      category: "Entrepreneurs",
-      items: ["Business owners", "Personal brands", "Startup founders", "Industry advisors"],
-      icon: <TrendingUp className="w-5 h-5 text-emerald-300" />
-    }
+  const benefits = [
+    { title: "Brand clarity score", desc: "Verify if visitors understand your value proposition within 5 seconds.", icon: "fa-bullseye", accent: "#42c28b" },
+    { title: "Trust evaluation", desc: "Audit your portfolio proof architecture and client credibility triggers.", icon: "fa-shield-halved", accent: "#81eee8" },
+    { title: "Visual experience review", desc: "Measure container aesthetics, layout craftsmanship, and mobile speeds.", icon: "fa-layer-group", accent: "#fbf6bc" },
+    { title: "Conversion analysis", desc: "Pinpoint hidden leaks stopping interested prospects from booking calls.", icon: "fa-filter-circle-dollar", accent: "#fb7474" },
+    { title: "Growth recommendations", desc: "Obtain a clear roadmap designed to attract high-end retainer clients.", icon: "fa-chart-line", accent: "#42c28b" }
   ];
 
-  const leakPoints = [
-    "their value is unclear within the first 5 seconds",
-    "their presentation feels commoditized or generic",
-    "their portfolio displays screenshots instead of strategic ROI",
-    "their audience does not understand their bespoke offer",
-    "there is no clear, automated path for qualified leads to contact them"
+  const audiences = [
+    { title: "Freelancers", desc: "Independent creatives ready to command high-ticket client retainers.", icon: "fa-user-tie" },
+    { title: "Agencies", desc: "Boutique studios establishing dominant authority positioning online.", icon: "fa-building-columns" },
+    { title: "Creators", desc: "Digital brands converting attention into sustainable business equity.", icon: "fa-bolt" },
+    { title: "Entrepreneurs", desc: "Founders turning their website into a relentless 24/7 sales pipeline.", icon: "fa-briefcase" }
   ];
 
   return (
-    <div className="flex-1 flex flex-col overflow-y-auto">
+    <div className="w-full bg-white flex flex-col items-center select-none">
       {/* Hero Section */}
-      <section className="relative pt-12 pb-20 px-6 md:px-12 lg:px-20 flex flex-col items-center justify-center text-center max-w-6xl mx-auto overflow-hidden">
-        {/* Ambient background glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
-        
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/15 bg-white/5 mb-8 animate-fade-in backdrop-blur-md">
-          <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-          <span className="text-[10px] sm:text-xs uppercase tracking-[0.22em] font-medium text-white/90">
-            Powered by Web Design King
+      <section className="relative w-full max-w-5xl mx-auto px-6 pt-12 pb-24 text-center flex flex-col items-center justify-center min-h-[75vh]">
+        {/* Soft Ambient Background Gradient */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[650px] h-[350px] bg-gradient-to-tr from-[#82e3aa]/25 via-[#81eee8]/20 to-[#fbf6bc]/30 rounded-full blur-[100px] pointer-events-none -z-10" />
+
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#42c28b]/30 bg-[#82e3aa]/20 mb-8 shadow-sm">
+          <i className="fa-solid fa-circle-check text-[#42c28b] text-xs"></i>
+          <span className="text-xs uppercase tracking-[0.18em] font-bold text-black">
+            Free Digital Presence Audit
           </span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight text-white mb-6 max-w-4xl leading-[1.1]">
-          How strong is your <span className="font-serif italic font-normal text-white">digital presence?</span>
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-black mb-6 max-w-4xl leading-[1.08]">
+          Discover how strong your digital presence really is.
         </h1>
 
-        <p className="text-base sm:text-xl text-white/70 max-w-3xl font-light leading-relaxed mb-12">
-          Take the free <strong className="text-white font-medium">Freelancer/Agency Digital Presence Audit™</strong> and discover what is helping or hurting your ability to attract high-value clients, lucrative opportunities, and instant trust online.
+        <p className="text-lg sm:text-2xl text-black font-normal max-w-2xl leading-relaxed mb-12 opacity-90">
+          Find out what is helping or hurting your ability to attract clients, build trust, and grow online.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
+        {/* Primary Dominant CTA */}
+        <div className="w-full max-w-md mx-auto">
           <button
             onClick={onStartAudit}
-            className="w-full sm:w-auto px-8 py-4 bg-white text-[#0A0A0B] rounded-full text-xs uppercase tracking-[0.2em] font-bold hover:bg-white/90 transition-all shadow-lg hover:shadow-white/10 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+            className="w-full py-5 px-10 rounded-full bg-gradient-to-r from-[#82e3aa] via-[#42c28b] to-[#81eee8] text-black font-black text-base sm:text-lg uppercase tracking-[0.15em] shadow-2xl shadow-[#42c28b]/40 hover:shadow-[#82e3aa]/60 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-white"
           >
-            Start My Free Audit
-            <ArrowRight className="w-4 h-4" />
+            Start Your Free Audit
+            <i className="fa-solid fa-arrow-right text-black"></i>
           </button>
-          
-          <button
-            onClick={onSeeHowItWorks}
-            className="w-full sm:w-auto px-8 py-4 border border-white/20 rounded-full text-xs uppercase tracking-[0.2em] text-white/80 hover:text-white hover:bg-white/5 transition-all flex items-center justify-center gap-2"
-          >
-            <ShieldCheck className="w-4 h-4 text-white/50" />
-            See How It Works
-          </button>
-        </div>
-
-        <div className="mt-8 flex items-center justify-center gap-6 text-[11px] text-white/40 font-mono tracking-widest uppercase">
-          <span>⚡ 3-Min Assessment</span>
-          <span>•</span>
-          <span>🔒 100% Confidential</span>
-          <span>•</span>
-          <span>📊 Instant Score</span>
-        </div>
-      </section>
-
-      {/* Social Proof Banner */}
-      <section className="border-y border-white/10 bg-[#0D0D0F] py-8 px-6 text-center">
-        <p className="text-sm sm:text-base text-white/80 font-light tracking-wide max-w-3xl mx-auto font-serif italic">
-          "Built for freelancers, agencies, and digital professionals who want to look as professional online as the work they deliver."
-        </p>
-      </section>
-
-      {/* Brand Positioning Section */}
-      <section className="py-20 px-6 md:px-12 max-w-6xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-[11px] font-mono uppercase tracking-[0.3em] text-amber-300/80">
-              Executive Reality Check
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-white leading-snug">
-              "Your digital presence is your <span className="font-serif italic font-normal text-white underline decoration-white/20 underline-offset-8">silent salesperson.</span>"
-            </h2>
-            <p className="text-white/60 leading-relaxed font-light text-base">
-              Talent alone no longer guarantees retainer contracts. In a crowded digital economy, high-ticket buyers evaluate your online footprint within seconds to verify authority.
-            </p>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
-              <p className="text-xs uppercase tracking-widest text-white/50 font-semibold">
-                Why Many Talented Creators Struggle:
-              </p>
-              <ul className="space-y-3">
-                {leakPoints.map((leak, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-sm text-white/75 font-light">
-                    <div className="w-5 h-5 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0 mt-0.5 text-xs">
-                      ✕
-                    </div>
-                    <span>{leak}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="lg:col-span-6">
-            <div className="bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/15 rounded-3xl p-8 sm:p-10 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-amber-400/10 rounded-full blur-3xl" />
-              
-              <h3 className="text-xl font-medium tracking-tight text-white mb-2">
-                What You Receive in Your Report
-              </h3>
-              <p className="text-xs text-white/50 tracking-wide uppercase font-mono mb-8">
-                Executive Diagnostic Deliverables
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {reportDeliverables.map((item, index) => (
-                  <div key={index} className="flex items-start gap-3 group">
-                    <div className="w-6 h-6 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white text-xs shrink-0 mt-0.5 group-hover:bg-white group-hover:text-[#0A0A0B] transition-colors">
-                      ✓
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-white/90">{item.title}</h4>
-                      <p className="text-xs text-white/50 font-light mt-0.5">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-10 pt-8 border-t border-white/10 flex items-center justify-between">
-                <div className="text-xs text-white/60">
-                  <span className="text-white font-medium">Cost:</span> $0.00 (100% Free Audit)
-                </div>
-                <button
-                  onClick={onStartAudit}
-                  className="px-6 py-2.5 bg-white text-[#0A0A0B] rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white/90 transition-all shadow-md"
-                >
-                  Start Audit Now →
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Target User Personas Section */}
-      <section className="py-20 px-6 md:px-12 border-t border-white/10 bg-[#0A0A0B]/80 max-w-6xl mx-auto w-full">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-[11px] font-mono uppercase tracking-[0.3em] text-white/40">
-            Tailored Assessment Framework
+          <span className="block mt-4 text-xs font-mono text-black tracking-widest uppercase opacity-75">
+            Takes 3 Minutes • Instant Score • 100% Free
           </span>
-          <h2 className="text-3xl font-light tracking-tight text-white mt-2">
-            Designed for <span className="font-serif italic font-normal">Modern Digital Leaders</span>
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {targetPersonas.map((persona, i) => (
-            <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col justify-between glass-card glass-card-hover">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                    {persona.icon}
-                  </div>
-                  <h3 className="text-lg font-medium text-white tracking-wide">{persona.category}</h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {persona.items.map((role, idx) => (
-                    <span key={idx} className="px-3 py-1 rounded-full text-xs font-light bg-white/5 border border-white/10 text-white/75">
-                      {role}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-white/40">
-                <span>Custom Benchmark</span>
-                <span className="font-mono text-white/60">100 Pts Scale</span>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
-      {/* Bottom CTA Banner */}
-      <section className="py-24 px-6 text-center border-t border-white/10 relative overflow-hidden bg-[#0D0D0F]">
-        <div className="absolute inset-0 bg-gradient-to-t from-white/[0.03] to-transparent pointer-events-none" />
-        <h2 className="text-3xl sm:text-5xl font-light text-white mb-6 max-w-3xl mx-auto leading-tight">
-          Ready to diagnose your <span className="font-serif italic font-normal">digital presence?</span>
-        </h2>
-        <p className="text-white/60 font-light max-w-xl mx-auto mb-10 text-sm sm:text-base">
-          Join hundreds of freelancers and agency founders who have uncovered their hidden conversion bottlenecks.
-        </p>
-        <button
-          onClick={onStartAudit}
-          className="px-10 py-5 bg-white text-[#0A0A0B] rounded-full text-xs uppercase tracking-[0.25em] font-extrabold hover:bg-white/90 transition-all shadow-xl hover:scale-105"
-        >
-          Begin Free Assessment
-        </button>
+      {/* How It Works Section */}
+      <section className="w-full py-24 px-6 bg-gradient-to-b from-white via-[#fbf6bc]/15 to-white border-t border-[#82e3aa]/30">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="mb-16">
+            <span className="text-xs font-mono uppercase tracking-[0.25em] text-black font-bold opacity-60">
+              Simple 3-Step Process
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-black tracking-tight mt-2">
+              How It Works
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {steps.map((st, i) => (
+              <div key={i} className="bg-white border border-[#82e3aa]/40 rounded-3xl p-8 flex flex-col items-center text-center shadow-lg shadow-[#82e3aa]/10 hover:border-[#42c28b] hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute -right-6 -top-6 w-24 h-24 bg-[#81eee8]/20 rounded-full blur-xl" />
+                <span className="text-4xl font-black font-mono text-black mb-6 tracking-tight">
+                  {st.num}
+                </span>
+                <div className="w-14 h-14 rounded-2xl bg-[#82e3aa]/30 border border-[#42c28b]/20 flex items-center justify-center text-[#42c28b] text-2xl mb-6 shadow-sm">
+                  <i className={`fa-solid ${st.icon}`}></i>
+                </div>
+                <h3 className="text-xl font-bold text-black mb-3">
+                  {st.title}
+                </h3>
+                <p className="text-sm text-black font-normal opacity-80 leading-relaxed">
+                  {st.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What You Get Section */}
+      <section className="w-full py-24 px-6 bg-white border-t border-[#82e3aa]/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-xs font-mono uppercase tracking-[0.25em] text-black font-bold opacity-60">
+              Audit Benefits
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-black tracking-tight mt-2">
+              What You Get
+            </h2>
+            <p className="text-black text-base mt-3 opacity-80 font-normal">
+              Every section answers one question: Why should you care?
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {benefits.map((b, idx) => (
+              <div key={idx} className="bg-gradient-to-br from-white to-[#fbf6bc]/20 border border-[#82e3aa]/40 rounded-3xl p-8 flex flex-col justify-between shadow-md hover:shadow-xl hover:border-[#42c28b] transition-all duration-300">
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#82e3aa]/50 flex items-center justify-center mb-6 text-xl shadow-sm" style={{ color: b.accent }}>
+                    <i className={`fa-solid ${b.icon}`}></i>
+                  </div>
+                  <h3 className="text-lg font-bold text-black mb-2">
+                    {b.title}
+                  </h3>
+                  <p className="text-sm text-black opacity-80 font-normal leading-relaxed">
+                    {b.desc}
+                  </p>
+                </div>
+                <div className="mt-8 pt-4 border-t border-[#82e3aa]/30 flex items-center justify-between text-xs font-mono font-bold text-black">
+                  <span>Included in Assessment</span>
+                  <i className="fa-solid fa-check text-[#42c28b]"></i>
+                </div>
+              </div>
+            ))}
+
+            {/* Extra CTA Card in Benefits Grid */}
+            <div className="bg-gradient-to-br from-[#82e3aa] to-[#81eee8] border-2 border-white rounded-3xl p-8 flex flex-col justify-between items-center text-center shadow-xl">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mx-auto mb-6 text-xl shadow-sm text-[#fb7474]">
+                  <i className="fa-solid fa-rocket"></i>
+                </div>
+                <h3 className="text-xl font-black text-black mb-2">
+                  Why Should I Care?
+                </h3>
+                <p className="text-sm text-black opacity-90 font-normal mb-6 leading-relaxed">
+                  Because high-end buyers evaluate digital credibility instantly. Uncover your blind spots today.
+                </p>
+              </div>
+              <button
+                onClick={onStartAudit}
+                className="w-full py-4 px-6 rounded-full bg-white text-black font-extrabold text-xs uppercase tracking-widest shadow-md hover:scale-105 active:scale-95 transition-all border border-[#42c28b]"
+              >
+                Start Audit Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Who It's For Section */}
+      <section className="w-full py-24 px-6 bg-gradient-to-b from-white via-[#81eee8]/15 to-white border-t border-[#82e3aa]/30">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="mb-16">
+            <span className="text-xs font-mono uppercase tracking-[0.25em] text-black font-bold opacity-60">
+              Built For Growth
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-black tracking-tight mt-2">
+              Who It’s For
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {audiences.map((aud, i) => (
+              <div key={i} className="bg-white border border-[#82e3aa]/40 rounded-3xl p-8 text-center flex flex-col items-center justify-between shadow-lg hover:border-[#fb7474] hover:-translate-y-1 transition-all duration-300">
+                <div className="w-16 h-16 rounded-2xl bg-[#fbf6bc]/60 border border-[#82e3aa]/40 flex items-center justify-center text-[#42c28b] text-2xl mb-6 shadow-sm">
+                  <i className={`fa-solid ${aud.icon}`}></i>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-black mb-2">{aud.title}</h3>
+                  <p className="text-xs text-black opacity-80 font-normal leading-relaxed">{aud.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="w-full py-28 px-6 text-center border-t border-[#82e3aa]/40 bg-gradient-to-b from-[#82e3aa]/20 via-[#fbf6bc]/25 to-white relative overflow-hidden">
+        <div className="max-w-3xl mx-auto relative z-10">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-[#42c28b] flex items-center justify-center mx-auto mb-8 shadow-md">
+            <i className="fa-solid fa-crown text-[#42c28b] text-2xl"></i>
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl font-black text-black mb-6 leading-tight tracking-tight">
+            Ready to understand how your brand is perceived online?
+          </h2>
+          <p className="text-base sm:text-lg text-black font-normal max-w-xl mx-auto mb-10 opacity-85 leading-relaxed">
+            Your website is your 24/7 digital product. Stop guessing what premium clients think when they view your online presence.
+          </p>
+
+          <button
+            onClick={onStartAudit}
+            className="py-5 px-12 rounded-full bg-gradient-to-r from-[#42c28b] via-[#82e3aa] to-[#81eee8] text-black font-black text-base uppercase tracking-[0.18em] shadow-2xl shadow-[#42c28b]/40 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-white"
+          >
+            Take Your Free Audit
+          </button>
+        </div>
       </section>
     </div>
   );
