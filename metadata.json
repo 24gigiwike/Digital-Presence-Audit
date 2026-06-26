@@ -1,0 +1,6 @@
+{
+  "name": "Digital Presence Audit",
+  "description": "A premium digital presence assessment and strategy audit tool for freelancers, agencies, and digital creators powered by Web Design King.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
